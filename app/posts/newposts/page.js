@@ -23,7 +23,7 @@ const NewPosts = () => {
                     <div>
                         <label className='flex'><h1 className='text-lg pr-1 -mt-2'>Images</h1>
                         <input type="checkbox" className="toggle toggle-xs" onChange={()=>{
-                            isimage?setIsImage(false):setIsImage(true)
+                            setIsImage(isimage?false:true)
                         }}/>
                         </label>
                     </div>

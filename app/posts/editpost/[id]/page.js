@@ -52,7 +52,7 @@ const EditPosts = ({params}) => {
                     <div>
                         <label className='flex'>
                         <input type="checkbox" name="publish" value={publish} className="toggle toggle-xs" onChange={()=>{
-                            publish?setPublish(false):setPublish(true)
+                            setPublish(publish?false:true)
                         }} defaultChecked={publish}/>
                         <h1 className='pl-1 -mt-1.5'>{publish?'Published':'To Publish'}</h1>
                         </label>
