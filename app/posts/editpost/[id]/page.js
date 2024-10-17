@@ -2,13 +2,14 @@
 import { useEffect, useState } from "react";
 import {updatePost} from '@/lib/action/posts'
 
-const editPost = ({params}) => {
-    const [title,setTitle] = useState()
-    const [content,setContent] = useState()
-    const [publish,setPublish] = useState()
-    const [post,setPost] = useState();
-    const url = process.env.NEXT_PUBLIC_URL+'/api/posts?id='+params.id
+const EditPosts = ({params}) => {
+    const [title,setTitle] = useState("");
+    const [content,setContent] = useState("");
+    const [publish,setPublish] = useState("");
+    const [post,setPost] = useState("");
+    
     useEffect(()=>{
+        const url = process.env.NEXT_PUBLIC_URL+'/api/posts?id='+params.id
         fetch(url)
         .then(response => response.json())
         .then(data=>{setPost(data)
@@ -51,7 +52,7 @@ const editPost = ({params}) => {
                     <div>
                         <label className='flex'>
                         <input type="checkbox" name="publish" value={publish} className="toggle toggle-xs" onChange={()=>{
-                            {publish?setPublish(false):setPublish(true)}
+                            publish?setPublish(false):setPublish(true)
                         }} defaultChecked={publish}/>
                         <h1 className='pl-1 -mt-1.5'>{publish?'Published':'To Publish'}</h1>
                         </label>
@@ -69,4 +70,4 @@ const editPost = ({params}) => {
   )
 }
 
-export default editPost
+export default EditPosts

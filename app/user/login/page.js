@@ -2,13 +2,11 @@
 
 import { signIn } from "next-auth/react"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 const UserLogin = () => {
-    const [email,setEmail] = useState()
-    const [passcord,setPasscord] = useState()
-    const route = useRouter();
+    const [email,setEmail] = useState("")
+    const [passcord,setPasscord] = useState("")
 
     const getlogin = async(e)=>{
 
@@ -20,7 +18,7 @@ const UserLogin = () => {
         })
 
         if(!result?.error){
-            route.push('/')
+            location.href = '/'
         }
             
     }
@@ -64,7 +62,9 @@ const UserLogin = () => {
                 </label>
                 <button className="btn absolute right-0 rounded-xl">Login</button>
                 </form>
-                <h6 className="text-center pt-8">Want to create account ? <Link href='/user/register'className="link link-neutral text-sm">Register</Link></h6>
+                <h6 className="text-center pt-12">Want to create account ? <Link href='/user/register'className="link link-neutral text-sm">Register</Link></h6>
+                <h6 className="text-center">or</h6>
+                <h6 className="text-center"><Link href='/user/requestreset'className="link link-neutral text-sm">forgot password ?</Link></h6>
             </div>
         </div>
     </div>

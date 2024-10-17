@@ -1,11 +1,11 @@
 
 'use client'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { addNewPosts } from '../../../lib/action/posts';
 
-const newPosts = () => {
+const NewPosts = () => {
     const [isimage,setIsImage] = useState(false);
-    const [publish,setPublish] = useState()
+    const [publish,setPublish] = useState("")
   return (
     <div className='h-screen grid items-center'>
         <div className='flex justify-center'>
@@ -23,7 +23,7 @@ const newPosts = () => {
                     <div>
                         <label className='flex'><h1 className='text-lg pr-1 -mt-2'>Images</h1>
                         <input type="checkbox" className="toggle toggle-xs" onChange={()=>{
-                            {isimage?setIsImage(false):setIsImage(true)}
+                            isimage?setIsImage(false):setIsImage(true)
                         }}/>
                         </label>
                     </div>
@@ -49,4 +49,4 @@ const newPosts = () => {
   )
 }
 
-export default newPosts
+export default NewPosts

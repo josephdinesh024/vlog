@@ -34,7 +34,7 @@ const Navbar = async({children}) => {
                       <div className="dropdown dropdown-bottom dropdown-end">
                       <div tabIndex={0} role="button" className="hover:border-b-2 border-black pb-4">Profile</div>
                       <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 mt-2 shadow">
-                        <li><Link href='user/login'>SignIn</Link></li>
+                        <li><Link href='/user/login'>SignIn</Link></li>
                       </ul>
                     </div>
                     }

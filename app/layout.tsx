@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
 import "./globals.css";
 import { Poppins } from 'next/font/google';
 import Navbar from "@/components/Navbar"
+import { SessionProvider } from "next-auth/react";
 
 const poppins = Poppins({
   subsets: ['latin'],
@@ -26,7 +26,9 @@ export default function RootLayout({
     <html lang="en" data-theme="pastel">
       <body
         className={`${poppins.variable} antialiased`}>
-          <Navbar children={children} />
+          <SessionProvider>
+          <Navbar>{children}</Navbar>
+          </SessionProvider>
       </body>
     </html>
   );

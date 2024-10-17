@@ -4,7 +4,7 @@ import prisma from '../lib/prisma'
 import Credentials from "next-auth/providers/credentials"
 import bcrypt from 'bcryptjs'
 
-export const {handlers,signIn,signOut,auth} = NextAuth({
+export const {handlers,signIn,signOut,auth,update} = NextAuth({
     session:{
         strategy:'jwt'
     },
@@ -25,4 +25,19 @@ export const {handlers,signIn,signOut,auth} = NextAuth({
             },
         }),
     ],
+    callbacks:{
+       async jwt({token,session,trigger}){
+        if(trigger==='update'){
+        const user = await prisma.user.findUnique({where:{id:Number(token.sub)}})
+        token = {...token, name:user.name,email:user.email,picture:user.image}
+        console.log('update',user)
+        }
+        session=token
+        return session
+        },
+        // async session({session,token}){
+        //     session.user = token
+        //     return session
+        // }
+    }
 });

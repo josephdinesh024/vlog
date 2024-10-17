@@ -4,10 +4,10 @@ import Link from 'next/link';
 import {createRegister} from '../../../lib/action/user'
 
 const UserRegister = () => {
-    const [username,setUsername] = useState();
-    const [email,setEmail] = useState();
-    const [passcord,setPasscord] = useState();
-    const [confirmPasscord,setConfirmPasscord] = useState();
+    const [username,setUsername] = useState("");
+    const [email,setEmail] = useState("");
+    const [passcord,setPasscord] = useState("");
+    const [confirmPasscord,setConfirmPasscord] = useState("");
 
   return (
     <div className='h-screen grid content-center'>
