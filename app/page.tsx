@@ -1,4 +1,4 @@
-'use client'
+
 import Image from "next/image";
 import profile from '@/public/uploads/default.png'
 import {format} from 'date-fns'

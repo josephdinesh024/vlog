@@ -2,19 +2,28 @@
 import React, { useState } from 'react'
 import Link from 'next/link';
 import {createRegister} from '../../../lib/action/user'
+import { useFormState } from 'react-dom';
+
+const initialStatu = {
+    message:null
+}
 
 const UserRegister = () => {
     const [username,setUsername] = useState("");
     const [email,setEmail] = useState("");
     const [passcord,setPasscord] = useState("");
     const [confirmPasscord,setConfirmPasscord] = useState("");
+    const [status,formAction] = useFormState(createRegister,initialStatu)
+    const [loading,setLoading] = useState(false)
 
   return (
     <div className='h-screen grid content-center'>
-        <div className='w-full flex justify-center'>
+        {loading && !status?.message?<LoadingUi />:null}
+        <div className={`w-full flex justify-center ${loading && !status?.message?'blur-sm':''}`}>
             <div className='w-1/3 space-y-4 -mt-8 relative'>
-                <form method='POST' action={createRegister} className='space-y-4'>
+                <form method='POST' action={formAction} className='space-y-4'>
                     <h1 className='text-center text-xl font-mono font-semibold p-4'>Register Form</h1>
+                    {status.message?<span className='pl-4 text-sm text-red-600'>{status.message}</span>:null}
                     <label className="input input-bordered flex items-center gap-2">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -44,6 +53,7 @@ const UserRegister = () => {
                         onChange={(e)=>setEmail(e.target.value)}
                         placeholder="Email" />
                     </label>
+                    {status.target=='email'?<span className='pl-4 text-xs text-red-600'>* Email is already exists</span>:null}
 
                     <label className="input input-bordered flex items-center gap-2">
                         <svg
@@ -78,7 +88,11 @@ const UserRegister = () => {
                         placeholder='Confirm Passcord'/>
                     </label>
                 <button className="btn absolute right-0 rounded-xl"disabled={
-                    (username && email && passcord && passcord === confirmPasscord)?false:true}>Register</button>
+                    (username && email && passcord && passcord === confirmPasscord)?false:true}
+                    onClick={()=>{setLoading(loading?false:true)
+                        status.message=null
+                    }}
+                    >Register</button>
                 </form>
                 <h6 className="text-center pt-8">Have a account ? <Link href='/user/login'className="link link-neutral text-sm">Login</Link></h6>
             </div>
@@ -88,3 +102,11 @@ const UserRegister = () => {
 }
 
 export default UserRegister
+
+const LoadingUi = ()=>{
+    return (
+        <div className='flex justify-center z-20'>
+            <span className="loading loading-spinner loading-md"></span>
+        </div>
+    )
+}

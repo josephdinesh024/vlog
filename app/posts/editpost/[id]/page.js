@@ -7,6 +7,7 @@ const EditPosts = ({params}) => {
     const [content,setContent] = useState("");
     const [publish,setPublish] = useState("");
     const [post,setPost] = useState("");
+    const [loading,setLoading] = useState(false)
     
     useEffect(()=>{
         const url = process.env.NEXT_PUBLIC_URL+'/api/posts?id='+params.id
@@ -19,10 +20,12 @@ const EditPosts = ({params}) => {
         })
     },[])
   return (
+    <>
+    {loading?<LoadingUi/>:null}
     <div className='h-screen grid items-center'>
-        <div className='flex justify-center'>
+        <div className={`w-full flex justify-center ${loading?'blur-sm':''}`}>
             <div className='w-2/3 p-8 shadow-xl rounded-2xl'>
-                <h1 className='text-2xl font-medium m-4'>New Post</h1>
+                <h1 className='text-2xl font-medium m-4'>Edit Post</h1>
                 {post && 
                 <form method='POST' action={updatePost} className='space-y-4 m-6 relative mb-8'>
                     <input type="hidden" name="post_id" value={post.id}/>
@@ -59,7 +62,9 @@ const EditPosts = ({params}) => {
                     </div>
                     <div className='space-x-2 absolute right-0'>
                         <div className="tooltip" data-tip="Save change">
-                        <button className='btn rounded-lg'>Save</button>
+                        <button className='btn rounded-lg'
+                        onClick={()=>setLoading(true)}
+                        >Save</button>
                         </div>
                     </div>
                 </form>
@@ -67,7 +72,16 @@ const EditPosts = ({params}) => {
             </div>
         </div>
     </div>
+    </>
   )
 }
 
 export default EditPosts
+
+const LoadingUi = ()=>{
+    return (
+        <div className='z-50 h-screen absolute grid content-center left-1/2'>
+            <span className="loading loading-spinner loading-md"></span>
+        </div>
+    )
+}

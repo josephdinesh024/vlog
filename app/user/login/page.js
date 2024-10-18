@@ -7,9 +7,11 @@ import { useState } from "react"
 const UserLogin = () => {
     const [email,setEmail] = useState("")
     const [passcord,setPasscord] = useState("")
+    const [loading,setLoading] = useState(false)
+    const [errorMessage,setErrorMessage] = useState(false)
 
     const getlogin = async(e)=>{
-
+        setLoading(true)
         e.preventDefault();
         const result = await signIn('credentials',{
             redirect:false,
@@ -20,15 +22,21 @@ const UserLogin = () => {
         if(!result?.error){
             location.href = '/'
         }
+        else{
+            setLoading(false)
+            setErrorMessage(true)
+        }
             
     }
 
   return (
     <div className='h-screen grid content-center'>
-        <div className='w-full flex justify-center'>
+        {loading?<LoadingUi />:null}
+        <div className={`w-full flex justify-center ${loading?'blur-sm':''}`}>
             <div className='w-1/3 space-y-4 -mt-14 relative'>
                 <form method="POST" onSubmit={getlogin} className="space-y-4">
                 <h1 className='text-center text-xl font-mono font-semibold p-4'>Login Form</h1>
+                {errorMessage?<ErrorMessage />:null}
                 <label className="input input-bordered flex items-center gap-2">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -72,3 +80,17 @@ const UserLogin = () => {
 }
 
 export default UserLogin
+
+const LoadingUi = ()=>{
+    return (
+        <div className='flex justify-center z-20'>
+            <span className="loading loading-spinner loading-md"></span>
+        </div>
+    )
+}
+
+const ErrorMessage = ()=>{
+    return(
+        <span className="text-sm text-red-600 pl-4">* Incorrect passcord or email</span>
+    )
+}

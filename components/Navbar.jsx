@@ -1,7 +1,7 @@
 import React from 'react';
 import { auth} from "@/app/auth";
 import Link from "next/link";
-import SignOut from '@/components/SignOut'
+import SignOut from './SignOut'
 
 const Navbar = async({children}) => {
     const session = await auth();
@@ -27,7 +27,7 @@ const Navbar = async({children}) => {
                       </div>
                       <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 mt-2 shadow">
                         <li><Link href='/posts'>Account</Link></li>
-                        <li><SignOut/></li>
+                        <li><SignOut /></li>
                       </ul>
                     </div>
                     </>:

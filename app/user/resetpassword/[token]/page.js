@@ -10,10 +10,11 @@ const ResetPassword = ({params}) => {
     const {data:session} = useSession()
     const [passcord,setPasscord] = useState("");
     const [confirmPasscord,setConfirmPasscord] = useState("");
+    const [loading,setLoading] = useState(false)
     useEffect(()=>{
          verifyToken(params.token)
          .then(data => {setTokenData(data)
-         console.log(data)})
+         })
     },[])
     if(tokenData?.message==='error'){
         return (
@@ -27,8 +28,8 @@ const ResetPassword = ({params}) => {
         if(session){
             signOut()
         }
-    return (
-        <div className='w-full flex justify-center'>
+    return (<>{loading?<LoadingUi />:null}
+        <div className={`w-full flex justify-center ${loading?'blur-sm':''}`}>
             <div className='w-1/3 relative h-screen grid content-center'>
                 <form className='space-y-4 -mt-10' action={resetPasswordAction}>
                     <input type='hidden' name='email' value={tokenData?.data}/>
@@ -67,12 +68,21 @@ const ResetPassword = ({params}) => {
                                 placeholder='Confirm Passcord'/>
                             </label>
                         <button className="btn absolute right-0 rounded-xl"disabled={
-                            (passcord && passcord === confirmPasscord)?false:true}>Change</button>
+                            (passcord && passcord === confirmPasscord)?false:true}
+                            onClick={()=>setLoading(true)}>Change</button>
                 </form>
             </div>
-        </div>
+        </div></>
     )
     }
 }
 
 export default ResetPassword
+
+const LoadingUi = ()=>{
+    return (
+        <div className='z-50 h-screen absolute grid content-center left-1/2'>
+            <span className="loading loading-spinner loading-md"></span>
+        </div>
+    )
+}

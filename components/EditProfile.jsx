@@ -11,21 +11,19 @@ const EditProfile = ({userId}) => {
     const [image,setImage] = useState("");
     const [editForm,setEditForm] = useState(false);
     const [sessiondata,setSessionData] = useState("");
-    
+
     const { data: session, update } = useSession()
     const updateSession = ()=>{
         update({});
-        console.log('refer')
-        location.href = '/posts'
         setEditForm(false)
-        
     }
     useEffect(()=>{
         if(session && session.user)
             setSessionData(session.user)
     },[session])
     
-  return (
+  return (<>
+
     <div className='space-y-2'>
         <button className='absolute right-0 top-0' onClick={() =>{setEditForm(editForm?false:true)
         }}>
@@ -77,6 +75,7 @@ const EditProfile = ({userId}) => {
         <button className='btn rounded-lg bg-gray-300' onClick={username||email||image?updateSession:null}>Save</button>
         </form>
     </div>
+    </>
   )
 }
 

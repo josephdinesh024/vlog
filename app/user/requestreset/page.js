@@ -1,15 +1,27 @@
 'use client'
 import { generateToken } from '@/lib/action/user'
+import { useFormState } from 'react-dom'
+import { useState } from 'react'
 
 
-const passwordResetLink = () => {
+const initialStatu = {
+    message:null,
+    loading:false
+}
+
+const PasswordResetLink = () => {
+    const [status,formAction] = useFormState(generateToken,initialStatu)
+    const [loading,setLoading] = useState(false)
+
   return (
     <>
-        <div className='w-full flex justify-center'>
+        {loading && !status?.message?<LoadingUi />:null}
+        <div className={`w-full flex justify-center ${loading && !status?.message?'blur-sm':''}`}>
             <div className='w-1/3 relative h-screen grid content-center'>
-                <form className='-mt-12 relative space-y-4' action={generateToken}>
+                <form className='-mt-12 relative space-y-4' action={formAction}>
                     <h1 className='text-2xl'>Passcord Reset</h1>
                     <h6 className='text-sm pl-4'>Enter your email to send reset password link</h6>
+                    {status.message?<span className='pl-4 text-xs text-red-600 mt-2'>* {status.message}</span>:null}
                     <label className="input input-bordered flex items-center gap-2">
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -24,7 +36,11 @@ const passwordResetLink = () => {
                         <input type="email" name="email" className="grow"  required
                         placeholder="Email" />
                     </label>
-                    <button className="btn absolute right-0 rounded-xl">Reset link</button>
+                    <button className="btn absolute right-0 rounded-xl"
+                    onClick={()=>{setLoading(loading?false:true)
+                        status.message=null
+                    }}
+                    >Reset link</button>
                 </form>
             </div>
         </div>
@@ -32,4 +48,12 @@ const passwordResetLink = () => {
   )
 }
 
-export default passwordResetLink
+export default PasswordResetLink
+
+const LoadingUi = ()=>{
+    return (
+        <div className='z-50 h-screen absolute grid content-center left-1/2'>
+            <span className="loading loading-spinner loading-md"></span>
+        </div>
+    )
+}

@@ -6,9 +6,12 @@ import { addNewPosts } from '../../../lib/action/posts';
 const NewPosts = () => {
     const [isimage,setIsImage] = useState(false);
     const [publish,setPublish] = useState("")
+    const [loading,setLoading] = useState(false)
   return (
+    <> 
+    {loading?<LoadingUi/>:null}
     <div className='h-screen grid items-center'>
-        <div className='flex justify-center'>
+        <div className={`w-full flex justify-center ${loading?'blur-sm':''}`}>
             <div className='w-2/3 p-8 shadow-xl rounded-2xl'>
                 <h1 className='text-2xl font-medium m-4'>New Post</h1>
                 <form method='POST' action={addNewPosts} className='space-y-4 m-6 relative mb-8'>
@@ -36,17 +39,28 @@ const NewPosts = () => {
                     <div className='space-x-2 absolute right-0'>
                         <input type='hidden' name='publish' value={publish}/>
                         <div className="tooltip" data-tip="To live">
-                        <button className='btn rounded-lg' onClick={()=>setPublish(true)}>Publish</button>
+                        <button className='btn rounded-lg' onClick={()=>{setLoading(true)
+                            setPublish(true)}}>Publish</button>
                         </div>
                         <div className="tooltip" data-tip="Edit later">
-                        <button className='btn rounded-lg'onClick={()=>setPublish(false)}>Save</button>
+                        <button className='btn rounded-lg'onClick={()=>{setLoading(true)
+                            setPublish(false)}}>Save</button>
                         </div>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    </>
   )
 }
 
 export default NewPosts
+
+const LoadingUi = ()=>{
+    return (
+        <div className='z-50 h-screen absolute grid content-center left-1/2'>
+            <span className="loading loading-spinner loading-md"></span>
+        </div>
+    )
+}
