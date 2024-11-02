@@ -30,10 +30,11 @@ const UserLogin = () => {
     }
 
   return (
-    <div className='h-screen grid content-center'>
+    <>
+        <div className='h-screen grid content-center'>
         {loading?<LoadingUi />:null}
         <div className={`w-full flex justify-center ${loading?'blur-sm':''}`}>
-            <div className='w-1/3 space-y-4 -mt-14 relative'>
+            <div className='sm:w-1/3 space-y-4 -mt-14 relative'>
                 <form method="POST" onSubmit={getlogin} className="space-y-4">
                 <h1 className='text-center text-xl font-mono font-semibold p-4'>Login Form</h1>
                 {errorMessage?<ErrorMessage />:null}
@@ -76,6 +77,7 @@ const UserLogin = () => {
             </div>
         </div>
     </div>
+    </>
   )
 }
 

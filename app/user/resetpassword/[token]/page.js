@@ -19,7 +19,7 @@ const ResetPassword = ({params}) => {
     if(tokenData?.message==='error'){
         return (
         <div className='w-full flex justify-center'>
-            <div className='w-1/3 relative h-screen grid content-center -mt-16'>
+            <div className='sm:w-1/3 relative h-screen grid content-center -mt-16'>
                 <h1>{tokenData.data}</h1>
             </div>
         </div>)

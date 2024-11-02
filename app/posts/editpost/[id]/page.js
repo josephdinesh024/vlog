@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import {updatePost} from '@/lib/action/posts'
+import Editor from '@/components/Editor';
 
 const EditPosts = ({params}) => {
     const [title,setTitle] = useState("");
@@ -24,10 +25,10 @@ const EditPosts = ({params}) => {
     {loading?<LoadingUi/>:null}
     <div className='h-screen grid items-center'>
         <div className={`w-full flex justify-center ${loading?'blur-sm':''}`}>
-            <div className='w-2/3 p-8 shadow-xl rounded-2xl'>
+            <div className='sm:w-2/3 p-4 shadow-xl rounded-2xl'>
                 <h1 className='text-2xl font-medium m-4'>Edit Post</h1>
                 {post && 
-                <form method='POST' action={updatePost} className='space-y-4 m-6 relative mb-8'>
+                <form method='POST' action={updatePost} className='space-y-4 sm:m-6'>
                     <input type="hidden" name="post_id" value={post.id}/>
                     <div className='flex flex-col'>
                         <label htmlFor='title'>Title</label>
@@ -36,8 +37,9 @@ const EditPosts = ({params}) => {
                     </div>
                     <div className='flex flex-col'>
                         <label htmlFor='content'>Content</label>
-                        <textarea type='text' id='content' name='content' required value={content} 
-                        onChange={(e)=>setContent(e.target.value)} className="mt-2 textarea textarea-lg w-full max-w-lg text-sm"/>
+                        {/* <textarea type='text' id='content' name='content' required value={content} 
+                        onChange={(e)=>setContent(e.target.value)} className="mt-2 textarea textarea-lg w-full max-w-lg text-sm"/> */}
+                        <Editor initialContent={content} />
                     </div>
                     {/* <div>
                         <label className='flex'><h1 className='text-lg pr-1 -mt-2'>Images</h1>
@@ -60,7 +62,7 @@ const EditPosts = ({params}) => {
                         <h1 className='pl-1 -mt-1.5'>{publish?'Published':'To Publish'}</h1>
                         </label>
                     </div>
-                    <div className='space-x-2 absolute right-0'>
+                    <div className='flex justify-end'>
                         <div className="tooltip" data-tip="Save change">
                         <button className='btn rounded-lg'
                         onClick={()=>setLoading(true)}

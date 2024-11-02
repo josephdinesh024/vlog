@@ -1,49 +1,46 @@
 
 'use client'
-import { useState } from 'react'
+import { useState} from 'react'
 import { addNewPosts } from '../../../lib/action/posts';
+import 'quill/dist/quill.snow.css';
+import Editor from '@/components/Editor';
+import { useFormState } from 'react-dom';
+
+const initialStatu = {
+    message:null,
+    loading:false
+}
 
 const NewPosts = () => {
-    const [isimage,setIsImage] = useState(false);
     const [publish,setPublish] = useState("")
-    const [loading,setLoading] = useState(false)
+    const [status,formAction] = useFormState(addNewPosts,initialStatu)
+
   return (
     <> 
-    {loading?<LoadingUi/>:null}
+    { status?.loading?<LoadingUi/>:null}
     <div className='h-screen grid items-center'>
-        <div className={`w-full flex justify-center ${loading?'blur-sm':''}`}>
-            <div className='w-2/3 p-8 shadow-xl rounded-2xl'>
+        <div className={`w-full flex justify-center -mt-20 ${ status?.loading?'blur-sm':''}`}>
+            <div className='sm:w-2/3 p-4 shadow-xl rounded-2xl'>
                 <h1 className='text-2xl font-medium m-4'>New Post</h1>
-                <form method='POST' action={addNewPosts} className='space-y-4 m-6 relative mb-8'>
+                {status?.message?<span className='pl-4 text-sm text-red-600'>{status.message}</span>:null}
+                <form method='POST' action={formAction} className='space-y-4 sm:m-6'>
                     <div className='flex flex-col'>
                         <label htmlFor='title'>Title</label>
-                        <input type='text' id='title' name='title' required placeholder='Post tilte' className="mt-2 input w-full max-w-lg"/>
+                        <input type='text' id='title' name='title' placeholder='Post tilte' className="mt-2 input w-full max-w-lg"/>
                     </div>
                     <div className='flex flex-col'>
                         <label htmlFor='content'>Content</label>
-                        <textarea type='text' id='content' name='content' required placeholder='Post content'className="mt-2 textarea textarea-lg w-full max-w-lg text-sm"/>
+                        <Editor />
+                        {/* <textarea type='text' id='content' name='content' required placeholder='Post content'className="mt-2 textarea textarea-lg w-full max-w-lg text-sm"/> */}
                     </div>
-                    <div>
-                        <label className='flex'><h1 className='text-lg pr-1 -mt-2'>Images</h1>
-                        <input type="checkbox" className="toggle toggle-xs" onChange={()=>{
-                            setIsImage(isimage?false:true)
-                        }}/>
-                        </label>
-                    </div>
-                    <div className={isimage?'hidden:block':'hidden'}>
-                        <label className='input input-bordered flex items-center gap-2 max-w-lg cursor-pointer'>
-                            Select Image
-                        <input type="file" name='image' className='hidden'/>
-                        </label>
-                    </div>
-                    <div className='space-x-2 absolute right-0'>
+                    <div className='space-x-2 flex justify-end'>
                         <input type='hidden' name='publish' value={publish}/>
                         <div className="tooltip" data-tip="To live">
-                        <button className='btn rounded-lg' onClick={()=>{setLoading(true)
+                        <button className='btn rounded-lg' disabled={false} onClick={()=>{status.loading = true;
                             setPublish(true)}}>Publish</button>
                         </div>
                         <div className="tooltip" data-tip="Edit later">
-                        <button className='btn rounded-lg'onClick={()=>{setLoading(true)
+                        <button className='btn rounded-lg'disabled={false} onClick={()=>{status.loading = true;
                             setPublish(false)}}>Save</button>
                         </div>
                     </div>

@@ -4,6 +4,7 @@ import { Poppins } from 'next/font/google';
 import Navbar from "@/components/Navbar"
 import { SessionProvider } from "next-auth/react";
 
+
 const poppins = Poppins({
   subsets: ['latin'],
   display: 'swap',
@@ -24,6 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="pastel">
+      
       <body
         className={`${poppins.variable} antialiased`}>
           <SessionProvider>

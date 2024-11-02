@@ -17,7 +17,7 @@ const PasswordResetLink = () => {
     <>
         {loading && !status?.message?<LoadingUi />:null}
         <div className={`w-full flex justify-center ${loading && !status?.message?'blur-sm':''}`}>
-            <div className='w-1/3 relative h-screen grid content-center'>
+            <div className='sm:w-1/3 relative h-screen grid content-center'>
                 <form className='-mt-12 relative space-y-4' action={formAction}>
                     <h1 className='text-2xl'>Passcord Reset</h1>
                     <h6 className='text-sm pl-4'>Enter your email to send reset password link</h6>

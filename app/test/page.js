@@ -1,31 +1,71 @@
 'use client'
-import React, { useState } from 'react'
-import sendMails from '../../lib/nodemailer'
+// import { useEffect, useRef, useState } from 'react';
+// import 'quill/dist/quill.snow.css';
 
-const Page = () => {
-    const [title,setTitle] = useState("")
+// export default function Editor() {
+//   const editorRef = useRef(null);
+//   const [content, setContent] = useState('');
+//   useEffect(() => {
+//       const Quill = require('quill').default;  // Use '.default' for Quill
+//       const quill = new Quill(editorRef.current, {
+//         modules: {
+//           toolbar: [
+//             ['bold', 'italic'],
+//             ['link', 'blockquote', 'code-block', 'image'],
+//             [{ list: 'ordered' }, { list: 'bullet' }],
+//           ],
+//         },
+//         theme: 'snow',
+//       });
+//       quill.on('text-change', () => {
+//         setContent(quill.root.innerHTML); // Save content as HTML
+//       });
+//   }, []);
+
+//   return (
+//     <div>
+//       <div ref={editorRef}></div>
+//       <button onClick={handleSubmit}>Submit</button>
+//       <div>
+//         {data}
+//       </div>
+//       <div dangerouslySetInnerHTML={{ __html: JSON.parse(data)}} />
+//     </div>
+//   );
+// }
+
+import React, { useState } from 'react';
+import ReactQuill from 'react-quill';
+import EditorToolbar, { modules, formats } from "@/components/EditorTools";
+import '../snow.css'
+ 
+
+
+export default function TextEditor() {
+  const [text, setText] = useState('');
+
+  const handleChange = (value) => {
+    setText(value); // Update text state on change
+  };
 
   return (
-    <div className='flex w-full'>
-        <div className='w-1/2 p-6'>
-            Write Content
-            <label> Para
-            <textarea type='text' name='para' onChange={(e)=>{setTitle(e.target.value)
-                console.log(title)
-            }} />
-            </label>
-        </div>
-        <div className='w-1/2 p-6'>
-            Print Content
-            <span className='m-4'>{title}</span>
-        </div>
-        <h1>Send Mail</h1>
-        <button onClick={async()=>{
-            await sendMails('josephdinesh24@gmail.com','test',"<b>Hello world?</b> <a href='https://aptitude-lac.vercel.app/'>aptitude</a>")
-            console.log('send mail')
-        }}>send</button>
-    </div>
-  )
-}
+    <div style={{ display: 'flex', gap: '2rem' }}>
+      {/* Input Text Area */}
+      <div>
+        <h2>Input Text:</h2>
+        <EditorToolbar />
+        <ReactQuill value={text} onChange={handleChange} 
+        placeholder={'type some thing....'} 
+        modules={modules}
+        formats={formats}
+        />
+      </div>
 
-export default Page
+      {/* Display Entered Content */}
+      <div>
+        <h2>Live Preview:</h2>
+        <div className="ql-editor" dangerouslySetInnerHTML={{ __html: text }} />
+      </div>
+    </div>
+  );
+}

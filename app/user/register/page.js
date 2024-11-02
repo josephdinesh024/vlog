@@ -20,7 +20,7 @@ const UserRegister = () => {
     <div className='h-screen grid content-center'>
         {loading && !status?.message?<LoadingUi />:null}
         <div className={`w-full flex justify-center ${loading && !status?.message?'blur-sm':''}`}>
-            <div className='w-1/3 space-y-4 -mt-8 relative'>
+            <div className='sm:w-1/3 space-y-4 -mt-8 relative'>
                 <form method='POST' action={formAction} className='space-y-4'>
                     <h1 className='text-center text-xl font-mono font-semibold p-4'>Register Form</h1>
                     {status.message?<span className='pl-4 text-sm text-red-600'>{status.message}</span>:null}
@@ -94,7 +94,7 @@ const UserRegister = () => {
                     }}
                     >Register</button>
                 </form>
-                <h6 className="text-center pt-8">Have a account ? <Link href='/user/login'className="link link-neutral text-sm">Login</Link></h6>
+                <h6 className="text-center pt-12">Have a account ? <Link href='/user/login'className="link link-neutral text-sm">Login</Link></h6>
             </div>
         </div>
     </div>

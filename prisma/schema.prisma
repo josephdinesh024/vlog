@@ -22,6 +22,8 @@ model User{
   created_date DateTime      @default(now())
   updated_date DateTime      @updatedAt
   post Post[]
+  feedback UserOnFeedback[]
+  commands Command[]
 }
 
 model Post{
@@ -34,4 +36,51 @@ model Post{
   updated_date DateTime      @updatedAt
   user_id Int?
   user User? @relation(fields: [user_id], references: [id])
+  feedbacks Feedback?
+}
+
+model Feedback{
+  id String @id @default(uuid())
+  like Int @default(0)
+  unlike Int @default(0)
+  share Int @default(0)
+  user UserOnFeedback[]
+  post_id String @unique
+  post Post @relation(fields: [post_id],references: [id])
+  commands Command[]
+
+}
+
+model Command {
+  id String @id @default(uuid())
+  text String?
+  created_date DateTime      @default(now())
+  replys Reply[]
+  user_id Int?
+  user User? @relation(fields: [user_id], references: [id])
+  feedback_id String?
+  feedback Feedback? @relation(fields: [feedback_id],references: [id])
+}
+
+model UserOnFeedback{
+  user_id Int
+  user User @relation(fields: [user_id], references: [id])
+  feedback_id String
+  feedback Feedback @relation(fields: [feedback_id],references: [id])
+  liked String? @default("null")
+  isCommand String?
+  created_date DateTime      @default(now())
+  @@id([user_id,feedback_id])
+}
+
+model Reply {
+  id String @id @default(uuid())
+  text String?
+  reply_id String?
+  created_date DateTime      @default(now())
+  reply Reply? @relation("ReplyToReply",fields: [reply_id],references: [id])
+  selfReply Reply [] @relation("ReplyToReply")
+  user_emailId String?
+  command_id String?
+  command Command? @relation(fields: [command_id],references: [id])
 }

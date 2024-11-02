@@ -20,8 +20,8 @@ const PostPage = async() => {
     }
   return (<>
     { posts && <div>
-        <div className='w-9/12 m-12'>
-            <div className='w-full flex justify-between p-8'>
+        <div className='sm:w-9/12 mt-12'>
+            <div className='w-full flex flex-col lg:flex-row justify-between p-8 space-y-4 sm:space-y-0'>
                 <div >
                     <h1 className='text-2xl font-semibold capitalize'>Published post</h1>
                     {posts?.map((post)=>(
@@ -38,7 +38,7 @@ const PostPage = async() => {
                         </>
                     ))}
                 </div>
-                <div className='ml-14 flex flex-col'>
+                <div className='sm:ml-14 flex flex-col'>
                     <div className='w-80 p-6 border rounded-3xl shadow-xl relative'>
                     <Image src={`/uploads/${user.image}`} alt="" width={75} height={75}/>
                     <h1 className='text-xl mt-2'>{user.name}</h1>
