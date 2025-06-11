@@ -138,12 +138,12 @@ const Pages = ()=>{
                         <h3 className="p-2 w-96">Select a language for translation. This tells us which language you understand well.</h3>
                     </div>
                     <div className="flex flex-col p-6 mx-4 overflow-x-auto h-5/6">
-                        {Object.keys(language).map((key)=>(
-                            <label className={`capitalize w-96 border rounded-lg p-2 space-x-12 m-1 pl-8 ${key===selected?"bg-sky-200":null}`} >
-                                <input type="radio" id="lang" name="lang" value={key} checked={key===selected} onChange={(e)=>{
+                        {Object.keys(language).map((k,index)=>(
+                            <label className={`capitalize w-96 border rounded-lg p-2 space-x-12 m-1 pl-8 ${k===selected?"bg-sky-200":null}`} key={index}>
+                                <input type="radio" id="lang" name="lang" value={k} checked={k===selected} onChange={(e)=>{
                                     setSelected(e.target.value)
                                 }} /> 
-                                <span>{language[key]}</span>
+                                <span>{language[k]}</span>
                             </label>
                         ))}
                         

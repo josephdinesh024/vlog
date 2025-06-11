@@ -44,7 +44,7 @@ const SingleVlogPage = ({params}) => {
     
     useEffect(()=>{
         const url = process.env.NEXT_PUBLIC_URL+'/api/posts?id='+postid
-        let textData = ''
+        // let textData = ''
         fetch(url)
         .then(response => response.json())
         .then(data=>{

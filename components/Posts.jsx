@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 import Post from './Post'
 import {postDragDropUpdate} from '@/lib/action/posts'
 import { useEffect,useState } from 'react'
@@ -32,7 +32,7 @@ const Posts = ({userId}) => {
                 rightBlock.addEventListener('dragover',function(e){
                     e.preventDefault();
                 });
-                rightBlock.addEventListener('drop',function(e){
+                rightBlock.addEventListener('drop',function(){
                     console.log(selected.parentElement.getAttribute('id'))
                     if(selected.parentElement.getAttribute('id') != "right"){   // Unpublish
                         postDragDropUpdate(selected.getAttribute('id'),"false")
@@ -44,7 +44,7 @@ const Posts = ({userId}) => {
                 leftBlock.addEventListener('dragover',function(e){
                     e.preventDefault();
                 });
-                leftBlock.addEventListener('drop',function(e){
+                leftBlock.addEventListener('drop',function(){
                     if(selected.parentElement.getAttribute('id') != "left"){   // Publish
                         postDragDropUpdate(selected.getAttribute('id'),"true")
                         leftBlock.appendChild(selected);

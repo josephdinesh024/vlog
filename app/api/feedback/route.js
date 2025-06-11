@@ -74,9 +74,9 @@ export async function POST(params) {
                     
                 }
             }catch(error){
-                // console.log("feedback",error)
+                console.log("feedback",error)
                 if(data.like!==data.unlike){
-                    const cr = await prisma.feedback.update({data:{
+                    await prisma.feedback.update({data:{
                         like:data.like?{increment:1}:{increment:0},
                         unlike:data.unlike?{increment:1}:{increment:0},
                             },
@@ -106,7 +106,7 @@ export async function POST(params) {
                     // console.log("creat",cr)
                     }
                     else{
-                        const cr = await prisma.userOnFeedback.create({data:{
+                        await prisma.userOnFeedback.create({data:{
                             user_id:id,
                             feedback_id:post.feedbacks.id,
                         }})

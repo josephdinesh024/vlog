@@ -57,7 +57,7 @@ export async function POST(req) {
     for (const [keys, values] of Object.entries(textData)) {
       // console.log("first loop",textData)
       for (const [key, value] of Object.entries(values)){
-        let temp = resultData[indexs];
+        // let temp = resultData[indexs];
         // console.log(value)
         if(key==="text"){
           value.map(async(text)=>{
@@ -107,7 +107,7 @@ export async function POST(req) {
     for (const [keys, values] of Object.entries(data)) {
       if(keys==='<ul>'){
         let tmp = ""
-        for (const [key, value] of Object.entries(values)) {
+        for (let value of Object.values(values)) {
           tmp = tmp.concat(value)
         }
         tran = tran.concat(`<ul>${tmp}</ul>`)

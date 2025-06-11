@@ -1,4 +1,4 @@
-import prisma from '@/lib/prisma'
+// import prisma from '@/lib/prisma'
 // import Posts from '@/components/Posts'
 import { getUserId } from '@/lib/action/user'
 import { redirect } from 'next/navigation'
@@ -16,7 +16,7 @@ const PostPage = async() => {
     const session = await auth()
     if(session && session.user){
     const user = await getUserId()
-    var posts = null
+    // var posts = null
   return (<>
     { user?.id && <div>
         <div className='sm:w-9/12 mt-12'>

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import 'react-quill/dist/quill.snow.css'
 import EditorToolbar, { modules, formats } from '../../components/EditorTools';
-import {getcookie, setcookie} from '../../components/SetCooke'
+import {setcookie} from '../../components/SetCooke'
 import '../snow.css';
 
 
@@ -53,14 +53,14 @@ export default function TextEditor() {
                 rightBlock.addEventListener('dragover',function(e){
                     e.preventDefault();
                 });
-                rightBlock.addEventListener('drop',function(e){
+                rightBlock.addEventListener('drop',function(){
                     rightBlock.appendChild(selected);
                     selected=null
                 });
                 leftBlock.addEventListener('dragover',function(e){
                     e.preventDefault();
                 });
-                leftBlock.addEventListener('drop',function(e){
+                leftBlock.addEventListener('drop',function(){
                     leftBlock.appendChild(selected);
                     selected=null
                 });
