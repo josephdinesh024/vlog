@@ -3,7 +3,7 @@
 import { useState} from 'react'
 import { addNewPosts } from '../../../lib/action/posts';
 import 'quill/dist/quill.snow.css';
-import Editor from '@/components/Editor';
+import Editor from '../../../components/Editor';
 import { useFormState } from 'react-dom';
 
 const initialStatu = {
@@ -31,7 +31,6 @@ const NewPosts = () => {
                     <div className='flex flex-col'>
                         <label htmlFor='content'>Content</label>
                         <Editor />
-                        {/* <textarea type='text' id='content' name='content' required placeholder='Post content'className="mt-2 textarea textarea-lg w-full max-w-lg text-sm"/> */}
                     </div>
                     <div className='space-x-2 flex justify-end'>
                         <input type='hidden' name='publish' value={publish}/>

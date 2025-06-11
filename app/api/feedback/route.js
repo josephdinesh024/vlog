@@ -20,10 +20,10 @@ export async function POST(params) {
                     feedback_id:post.feedbacks.id
                 }
                 }})
-                console.log(feedback)
+                // console.log(feedback)
                 if(feedback){
                     var upData = null
-                    if(data.unlike){
+                    if(data.unlike && feedback?.liked !=='false'){
                         upData = {unlike:{increment:1}}
                         upData.like = feedback?.liked ==='null'?{decrement:0}:{decrement:1}
                         await prisma.feedback.update({where:{post_id:post.id,user:{some:{user_id:id}}},data:upData})
@@ -36,9 +36,9 @@ export async function POST(params) {
                             liked:'false'
                         }
                     })
-                        console.log('data',upData)
+                        // console.log('data',upData)
                     }
-                    else if(data.like){
+                    else if(data.like && feedback?.liked !=='true'){
                         upData = {like:{increment:1}}
                         upData.unlike = feedback?.liked ==='null'?{decrement:0}:{decrement:1}
                         await prisma.feedback.update({where:{post_id:post.id,user:{some:{user_id:id}}},data:upData})
@@ -51,7 +51,7 @@ export async function POST(params) {
                             liked:'true'
                         }
                     })
-                        console.log('data',upData)
+                        // console.log('data',upData)
                     }
                     else if(data.like===data.unlike && feedback?.liked !=='null' ){
                         upData = feedback?.liked==='true'?{like:{decrement:1}}:{unlike:{decrement:1}}
@@ -65,8 +65,8 @@ export async function POST(params) {
                             liked:'null'
                         }
                     })
-                        console.log('data',upData)
-                        console.log('same')
+                        // console.log('data',upData)
+                        // console.log('same')
                     }
                     
                 }
@@ -74,7 +74,7 @@ export async function POST(params) {
                     
                 }
             }catch(error){
-                console.log("feedback",error)
+                // console.log("feedback",error)
                 if(data.like!==data.unlike){
                     const cr = await prisma.feedback.update({data:{
                         like:data.like?{increment:1}:{increment:0},
@@ -103,14 +103,14 @@ export async function POST(params) {
                     feedback_id:post.feedbacks.id,
                     liked:data.like?'true':'false',
                 }})
-                    console.log("creat",cr)
+                    // console.log("creat",cr)
                     }
                     else{
                         const cr = await prisma.userOnFeedback.create({data:{
                             user_id:id,
                             feedback_id:post.feedbacks.id,
                         }})
-                        console.log("creat",cr)
+                        // console.log("creat",cr)
                     }
             }
 
@@ -134,7 +134,7 @@ export async function POST(params) {
                     user:{
                         create:[
                             {
-                                liked:data.like?'true':'false',
+                                liked:data.like===data.unlike?'null':data.like?'true':'false',
                                 user:{
                                     connect:{
                                         id

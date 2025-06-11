@@ -1,13 +1,13 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import { redirect } from 'next/navigation'
+import { redirect} from 'next/navigation'
 import '../../snow.css'
 import { useSession } from 'next-auth/react'
 import {setReplyCommand} from '../../../lib/action/posts'
 import {differenceInDays,differenceInMinutes, differenceInMilliseconds} from 'date-fns'
-import { revalidatePath } from 'next/cache'
-
+import {getcookie} from '@/components/SetCooke'
+import Link from 'next/link'
 
 const Timeposted = (dateTime)=>{
   const date = differenceInDays(Date.now(),dateTime)
@@ -36,34 +36,74 @@ const Timeposted = (dateTime)=>{
 const SingleVlogPage = ({params}) => {
     const [post,setPost] = useState()
     const [redirects,setRedirects] = useState(false)
+    const [translatedPost,setTranslatedPost] = useState('')
+    const [showtrans,setShowtrans] = useState(false)
+    const [translate,setTranslate] = useState(false)
+    const [translateLanguage,setTranslateLanguage] = useState()
     const postid = params.id;
+    
     useEffect(()=>{
-      
         const url = process.env.NEXT_PUBLIC_URL+'/api/posts?id='+postid
+        let textData = ''
         fetch(url)
         .then(response => response.json())
         .then(data=>{
-          if(data.publish)
+          if(data.publish){
           setPost(data)
+          const div = document.createElement('div');
+          div.innerHTML = data.content;
+          textData = data.content
+          fetch("http://localhost:3000/api/trans/detect", {
+            method: "POST",
+            body: JSON.stringify({
+              "text": div.textContent,
+              "target": "en"
+            }),
+            headers: { "Content-Type": "application/json" }
+          })
+          .then(res=>res.json())
+          .then(async(data)=>{
+            const lang = await getcookie()
+            setTranslateLanguage(lang)
+            if(data['detect']!==lang)
+            {
+              setTranslate(true)
+              
+            }
+            console.log(data['detect'],lang)
+          })
+        }
           else 
           setRedirects(true)
         })
     },[])
+
+    const handletranslate = async()=>{
+      if(!translatedPost){
+      const res = await fetch("http://localhost:3000/api/trans", {
+                method: "POST",
+                body: JSON.stringify({ html:post.content, targetLanguage:translateLanguage }),
+                headers: { "Content-Type": "application/json" }
+              });
+      const rslt = await res.json()
+      setTranslatedPost(rslt.translatedHtml)
+      }
+      setShowtrans(showtrans?false:true)
+    }
+
     if(redirects)
       redirect('/')
   return (<>
     {post && <div className="p-8" key='33'>
-            {/* <div className=" max-w-xl mb-8">
-              <div className="flex space-x-2">
-                <Image src={profile} alt="" width={38} height={38}/> 
-                <h1 className="pt-2">{post?.user?.name}</h1>
-                </div>
-                <span className="pl-8 text-xs font-light">{format(new Date(post?.user?.updated_date?post?.user?.updated_date:1), 'dd MMM yyyy')} </span>
-            </div> */}
             <div className="">
               <h1 className="text-xl font-medium">{post.title} </h1>
               {/* <p className="m-2">{post.content}</p> */}
-              <div className="ql-editor" dangerouslySetInnerHTML={{ __html: post.content}} />
+              <div className="ql-editor" dangerouslySetInnerHTML={{ __html:showtrans && translate?translatedPost:post.content}} />
+            </div>
+            <div className={`${translate?'block':'hidden'} space-x-3 text-sm font-semibold my-6`}>
+              <button onClick={handletranslate} className={`bg-gray-200 p-2 rounded-xl ${showtrans?"text-gray-500 bg-gray-50":null}`}>
+                {showtrans?"show Original":"show Translation"}</button>
+              <button><Link href={'/posts/langsetting'}>Translation setting</Link></button>
             </div>
             <FeedBacks postId={postid}/>
           </div>
@@ -141,9 +181,15 @@ const FeedBacks = ({postId})=>{
       setErrorMessage("You should login to say your feedback !")
       setLike(false)
       setUnlike(false)
+      setEffectload(false)
     }
   }
-
+  const replyFun = async()=>{
+    setEffectload(effectload?false:true)
+    await new Promise((resolve)=>setTimeout(resolve,1000));
+    // console.log("replyFun")
+    setEffectload(effectload?true:false)
+  }
   useEffect(()=>{
     fetch(process.env.NEXT_PUBLIC_URL+'/api/feedback?id='+postId)
     .then(res => res.json())
@@ -219,7 +265,7 @@ const FeedBacks = ({postId})=>{
                   {command.replys && <ReplyMessage replys={command.replys} />
                   }
                 </div>
-                <ReplyComponent commandId={command.id} userEmail={userEmail} />
+                <ReplyComponent commandId={command.id} userEmail={userEmail} fun={replyFun} />
               </div>
             </>
           )) }
@@ -230,7 +276,7 @@ const FeedBacks = ({postId})=>{
 }
 
 
-const ReplyComponent = ({commandId,userEmail})=>{
+const ReplyComponent = ({commandId,userEmail,fun})=>{
   const [replyForm,setReplyForm] = useState(false);
   const [commandText,setCommandText] = useState('');
   const [errorMessage,setErrorMessage] = useState();
@@ -248,9 +294,9 @@ const ReplyComponent = ({commandId,userEmail})=>{
           }} >reply</button>
       </div>
       {errorMessage && <span className='text-xs text-red-500'>{errorMessage}</span>}
+
       <form className={replyForm?'block':'hidden'} action={setReplyCommand} onSubmit={()=>{setCommandText('')
-        // location.reload()
-        revalidatePath('/vlog/'+commandId)
+        fun()
       }}>
         <input type='hidden' name='commandId' value={commandId}/>
         <input type='hidden' name='emailId' value={userEmail}/>
@@ -260,7 +306,8 @@ const ReplyComponent = ({commandId,userEmail})=>{
               setCommandText(e.target.value)
             } className='outline-none bg-white rounded-xl mt-2 p-1 border-dotted border-2' />
               <button  onClick={()=>{
-                setReplyForm(replyForm?false:true)}} className={`${commandText?'block m-2 pt-2':'hidden'} `}>
+                setReplyForm(replyForm?false:true)
+                }} className={`${commandText?'block m-2 pt-2':'hidden'} `}>
                   <svg width="20" height="20" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M2.5 8C2.5 4.96243 4.96243 2.5 8 2.5C9.00262 2.5 9.94117 2.76782 10.7496 3.2355C10.9887 3.37377 11.2945 3.29209 11.4328 3.05306C11.5711 2.81403 11.4894 2.50816 11.2504 2.36989C10.2938 1.81654 9.1831 1.5 8 1.5C4.41015 1.5 1.5 4.41015 1.5 8C1.5 11.5899 4.41015 14.5 8 14.5C11.5899 14.5 14.5 11.5899 14.5 8C14.5 7.72386 14.2761 7.5 14 7.5C13.7239 7.5 13.5 7.72386 13.5 8C13.5 11.0376 11.0376 13.5 8 13.5C4.96243 13.5 2.5 11.0376 2.5 8Z" fill="black"/>
                     <path d="M15.3536 3.35355C15.5488 3.15829 15.5488 2.84171 15.3536 2.64645C15.1583 2.45118 14.8417 2.45118 14.6464 2.64645L8 9.29289L5.35355 6.64645C5.15829 6.45118 4.84171 6.45118 4.64645 6.64645C4.45118 6.84171 4.45118 7.15829 4.64645 7.35355L7.64645 10.3536C7.84171 10.5488 8.15829 10.5488 8.35355 10.3536L15.3536 3.35355Z" fill="black"/>
@@ -273,6 +320,7 @@ const ReplyComponent = ({commandId,userEmail})=>{
   )
 }
 
+// Display reply message
 const ReplyMessage = ({replys})=>{
   const [load,setLoad] = useState(false)
   return (

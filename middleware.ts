@@ -12,5 +12,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/posts/newposts','/posts/editpost'],
+  matcher: ['/posts/newposts','/posts/editpost','/posts/langsetting'],
 }

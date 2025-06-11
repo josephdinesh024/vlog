@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import {updatePost} from '@/lib/action/posts'
-import Editor from '@/components/Editor';
+import Editor from '../../../../components/Editor';
 
 const EditPosts = ({params}) => {
     const [title,setTitle] = useState("");
@@ -37,23 +37,8 @@ const EditPosts = ({params}) => {
                     </div>
                     <div className='flex flex-col'>
                         <label htmlFor='content'>Content</label>
-                        {/* <textarea type='text' id='content' name='content' required value={content} 
-                        onChange={(e)=>setContent(e.target.value)} className="mt-2 textarea textarea-lg w-full max-w-lg text-sm"/> */}
                         <Editor initialContent={content} />
                     </div>
-                    {/* <div>
-                        <label className='flex'><h1 className='text-lg pr-1 -mt-2'>Images</h1>
-                        <input type="checkbox" className="toggle toggle-xs" onChange={()=>{
-                            {isimage?setIsImage(false):setIsImage(true)}
-                        }}/>
-                        </label>
-                    </div>
-                    <div className={isimage?'hidden:block':'hidden'}>
-                        <label className='input input-bordered flex items-center gap-2 max-w-xs cursor-pointer'>
-                            Select Image
-                        <input type="file" name='image' className='hidden'/>
-                        </label>
-                    </div> */}
                     <div>
                         <label className='flex'>
                         <input type="checkbox" name="publish" value={publish} className="toggle toggle-xs" onChange={()=>{

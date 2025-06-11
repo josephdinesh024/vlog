@@ -19,6 +19,7 @@ model User{
   email String @unique
   password String
   image String @default("default.png")
+  language String @default("en")
   created_date DateTime      @default(now())
   updated_date DateTime      @updatedAt
   post Post[]

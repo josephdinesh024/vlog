@@ -1,5 +1,6 @@
 'use client'
 
+import { setcookie } from "@/components/SetCooke"
 import { signIn } from "next-auth/react"
 import Link from "next/link"
 import { useState } from "react"
@@ -20,6 +21,7 @@ const UserLogin = () => {
         })
 
         if(!result?.error){
+            await setcookie();
             location.href = '/'
         }
         else{
