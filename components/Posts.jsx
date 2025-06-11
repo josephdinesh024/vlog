@@ -8,6 +8,9 @@ import { useEffect,useState } from 'react'
 const Posts = ({userId}) => {
     const [posts,setPosts] = useState()
     const [publish,setPublish] = useState("")
+    const lists = document.getElementsByClassName("dragItem");
+    const leftBlock = document.getElementById('left')
+    const rightBlock = document.getElementById('right')
     useEffect(()=>{
         console.log(userId)
         fetch("http://localhost:3000/api/posts",{
@@ -20,10 +23,9 @@ const Posts = ({userId}) => {
             setPosts(data['data'])
         })
     },[publish])
+
     function init(){
-        const lists = document.getElementsByClassName("dragItem");
-        const leftBlock = document.getElementById('left')
-        const rightBlock = document.getElementById('right')
+        
         console.log(rightBlock)
         let list = null
         for(list of lists){

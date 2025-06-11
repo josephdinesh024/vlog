@@ -3,8 +3,12 @@
 import { useState} from 'react'
 import { addNewPosts } from '../../../lib/action/posts';
 import 'quill/dist/quill.snow.css';
-import Editor from '../../../components/Editor';
+// import Editor from '../../../components/Editor';
 import { useFormState } from 'react-dom';
+
+import dynamic from 'next/dynamic';
+
+const Editor = dynamic(() => import('../../../components/Editor'), { ssr: false });
 
 const initialStatu = {
     message:null,
